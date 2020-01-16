@@ -72,5 +72,5 @@ module.exports = function(app, db, axios, cheerio) {
     app.post('/save', function(req,res) {
         
     });
-}
+};
 
