@@ -49,11 +49,12 @@ module.exports = function(app, db, axios, cheerio) {
     });
 
     // Route for posting/updating an Article's Note
-    app.post('/articles:id', function(req, res) {
+    app.post('/articles/:id', function(req, res) {
         // Create a new note and pass the given details from req.body to the note.
         db.Note.create(req.body).then(function(dbNote) {
+            console.log(dbNote)
             // Find and return the corresponding Article and update with the added note.
-            return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbnote._id }, { new: true });
+            return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
         }).then(function(dbArticle) {
             res.json(dbArticle);
         }).catch(function(error) {
