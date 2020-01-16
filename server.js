@@ -29,8 +29,9 @@ app.use(express.json());
 // Set up public folder 
 app.use(express.static('public'));
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost/NewsScaper', { useNewUrlParser: true });
+// Connect to MongoDB on localhost or deployed site
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Handlebars
 app.engine(
