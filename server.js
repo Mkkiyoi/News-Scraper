@@ -44,7 +44,6 @@ app.set('view engine', 'handlebars');
 
 // Routes
 require('./routes/htmlRoutes')(app, db, axios, cheerio);
-require('./routes/apiRoutes')(app);
 
 app.listen(PORT, function() {
   console.log('App running on port: ' + PORT);

@@ -37,10 +37,10 @@ module.exports = function(app, db, axios, cheerio) {
         });
     });
 
-    // Route for getting an Article by id, additionally populate it with its note
+    // Route for getting an Article by id, additionally populate it with its Comment
     app.get('/articles/:id', function(req, res) {
         db.Article.findOne({ _id: req.params.id })
-            .populate('note')
+            .populate('comment')
             .then(function(dbArticle) {
                 res.json(dbArticle);
             }).catch(function(error) {
@@ -48,13 +48,13 @@ module.exports = function(app, db, axios, cheerio) {
             });
     });
 
-    // Route for posting/updating an Article's Note
+    // Route for posting/updating an Article's Comment
     app.post('/articles/:id', function(req, res) {
-        // Create a new note and pass the given details from req.body to the note.
-        db.Note.create(req.body).then(function(dbNote) {
-            console.log(dbNote)
-            // Find and return the corresponding Article and update with the added note.
-            return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+        // Create a new Comment and pass the given details from req.body to the Comment.
+        db.Comment.create(req.body).then(function(dbComment) {
+            console.log(dbComment)
+            // Find and return the corresponding Article and update with the added Comment.
+            return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { "comment": dbComment._id }}, { new: true });
         }).then(function(dbArticle) {
             res.json(dbArticle);
         }).catch(function(error) {
@@ -70,8 +70,13 @@ module.exports = function(app, db, axios, cheerio) {
         });
     });
 
-    app.post('/save', function(req,res) {
-        
+    app.delete('/comments/:id', function(req, res) {
+        console.log(req.params.id)
+        db.Comment.deleteOne({ _id: req.params.id }).then(function() {
+            console.log("Comment removed.")
+        }).catch(function(error) {
+            console.log(error)
+        });
     });
 };
 
